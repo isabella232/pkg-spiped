@@ -1,0 +1,43 @@
+Description: Honor DESTDIR during installation.
+Author: Peter Pentchev <roam@ringlet.net>
+Forwarded: not yet
+Last-Update: 2012-11-15
+
+--- a/spiped/Makefile
++++ b/spiped/Makefile
+@@ -7,11 +7,11 @@
+ all:	${PROG}
+ 
+ install:${PROG}
+-	mkdir -p ${BINDIR}
+-	cp ${PROG} ${BINDIR}/_inst.${PROG}.$$$$_ &&	\
+-	    strip ${BINDIR}/_inst.${PROG}.$$$$_ &&	\
+-	    chmod 0555 ${BINDIR}/_inst.${PROG}.$$$$_ && \
+-	    mv -f ${BINDIR}/_inst.${PROG}.$$$$_ ${BINDIR}/${PROG}
++	mkdir -p ${DESTDIR}${BINDIR}
++	cp ${PROG} ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
++	    strip ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
++	    chmod 0555 ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ && \
++	    mv -f ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ ${DESTDIR}${BINDIR}/${PROG}
+ 
+ clean:
+ 	rm -f ${PROG} ${SRCS:.c=.o}
+--- a/spipe/Makefile
++++ b/spipe/Makefile
+@@ -7,11 +7,11 @@
+ all:	${PROG}
+ 
+ install:${PROG}
+-	mkdir -p ${BINDIR}
+-	cp ${PROG} ${BINDIR}/_inst.${PROG}.$$$$_ &&	\
+-	    strip ${BINDIR}/_inst.${PROG}.$$$$_ &&	\
+-	    chmod 0555 ${BINDIR}/_inst.${PROG}.$$$$_ && \
+-	    mv -f ${BINDIR}/_inst.${PROG}.$$$$_ ${BINDIR}/${PROG}
++	mkdir -p ${DESTDIR}${BINDIR}
++	cp ${PROG} ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
++	    strip ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
++	    chmod 0555 ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ && \
++	    mv -f ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ ${DESTDIR}${BINDIR}/${PROG}
+ 
+ clean:
+ 	rm -f ${PROG} ${SRCS:.c=.o}
