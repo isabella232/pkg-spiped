@@ -1,5 +1,5 @@
 spiped (1.2.2-1) unstable; urgency=low
 
-  * Initial release (Closes: #nnnn)
+  * Initial release.  Closes: #693310
 
  -- Peter Pentchev <roam@ringlet.net>  Thu, 15 Nov 2012 10:46:13 +0200
