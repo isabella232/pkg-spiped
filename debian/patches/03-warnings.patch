@@ -1,0 +1,68 @@
+Description: Fix a couple of compiler warnings.
+ - define _GNU_SOURCE for getopt(), strdup(), getaddrinfo() and SSIZE_MAX
+   on GNU/Linux
+ - undefine the asprintf macro if it is already defined, e.g. in glibc
+Author: Peter Pentchev <roam@ringlet.net>
+Forwarded: not yet
+Last-Update: 2012-11-16
+
+--- a/spiped/main.c
++++ b/spiped/main.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE
++
+ #include <inttypes.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+--- a/lib/util/entropy.c
++++ b/lib/util/entropy.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE
++
+ #include <fcntl.h>
+ #include <limits.h>
+ #include <stdint.h>
+--- a/lib/util/sock.c
++++ b/lib/util/sock.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE
++
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
+--- a/lib/util/warnp.c
++++ b/lib/util/warnp.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE
++
+ #include <errno.h>
+ #include <stdarg.h>
+ #include <stdio.h>
+--- a/lib/network/network_buf.c
++++ b/lib/network/network_buf.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE
++
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ 
+--- a/spipe/main.c
++++ b/spipe/main.c
+@@ -1,3 +1,5 @@
++#define _GNU_SOURCE
++
+ #include <sys/socket.h>
+ 
+ #include <inttypes.h>
+--- a/lib/util/asprintf.h
++++ b/lib/util/asprintf.h
+@@ -2,6 +2,9 @@
+ #define _ASPRINTF_H_
+ 
+ /* Avoid namespace collisions with BSD/GNU asprintf. */
++#ifdef asprintf
++#undef asprintf
++#endif
+ #define asprintf compat_asprintf
+ 
+ /**

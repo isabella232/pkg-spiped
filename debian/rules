@@ -1,13 +1,23 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
+# Debhelper rules file for spiped, the secure pipe daemon.
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+# Aim for the top, adapt if anything should break on the buildds.
+DEB_BUILD_MAINT_OPTIONS=	hardening=+all
+export DEB_BUILD_MAINT_OPTIONS
+
+CFLAGS=		$(shell dpkg-buildflags --get CFLAGS)
+CPPFLAGS=	$(shell dpkg-buildflags --get CPPFLAGS)
+LDFLAGS=	$(shell dpkg-buildflags --get LDFLAGS)
+
+CFLAGS+=	-pipe -Wall -W -std=c99 -pedantic -Wbad-function-cast \
+		-Wcast-align -Wcast-qual -Wchar-subscripts -Winline \
+		-Wmissing-prototypes -Wnested-externs -Wpointer-arith \
+		-Wredundant-decls -Wshadow -Wstrict-prototypes -Wwrite-strings
+ifneq (,$(filter werror,$(DEB_BUILD_OPTIONS)))
+	CFLAGS+=	-Werror
+endif
+
+export CFLAGS CPPFLAGS LDFLAGS
 
 %:
 	dh $@ 

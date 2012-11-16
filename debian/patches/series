@@ -1,2 +1,3 @@
 01-honor-destdir.patch
 02-honor-compiler-flags.patch
+03-warnings.patch
