@@ -1,6 +1,6 @@
 Description: Fix a couple of compiler warnings.
- - define _GNU_SOURCE for getopt(), strdup(), getaddrinfo() and SSIZE_MAX
-   on GNU/Linux
+ - define _POSIX_C_SOURCE to 200809L (POSIX:2008) for getopt(), strdup(),
+   getaddrinfo() and SSIZE_MAX
  - undefine the asprintf macro if it is already defined, e.g. in glibc
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: not yet
@@ -9,7 +9,7 @@ Last-Update: 2012-11-16
 --- a/spiped/main.c
 +++ b/spiped/main.c
 @@ -1,3 +1,5 @@
-+#define _GNU_SOURCE
++#define _POSIX_C_SOURCE	200809L
 +
  #include <inttypes.h>
  #include <stdio.h>
@@ -17,7 +17,7 @@ Last-Update: 2012-11-16
 --- a/lib/util/entropy.c
 +++ b/lib/util/entropy.c
 @@ -1,3 +1,5 @@
-+#define _GNU_SOURCE
++#define _POSIX_C_SOURCE	200809L
 +
  #include <fcntl.h>
  #include <limits.h>
@@ -25,7 +25,7 @@ Last-Update: 2012-11-16
 --- a/lib/util/sock.c
 +++ b/lib/util/sock.c
 @@ -1,3 +1,5 @@
-+#define _GNU_SOURCE
++#define _POSIX_C_SOURCE	200809L
 +
  #include <sys/types.h>
  #include <sys/socket.h>
@@ -33,7 +33,7 @@ Last-Update: 2012-11-16
 --- a/lib/util/warnp.c
 +++ b/lib/util/warnp.c
 @@ -1,3 +1,5 @@
-+#define _GNU_SOURCE
++#define _POSIX_C_SOURCE	200809L
 +
  #include <errno.h>
  #include <stdarg.h>
@@ -41,7 +41,7 @@ Last-Update: 2012-11-16
 --- a/lib/network/network_buf.c
 +++ b/lib/network/network_buf.c
 @@ -1,3 +1,5 @@
-+#define _GNU_SOURCE
++#define _POSIX_C_SOURCE	200809L
 +
  #include <sys/types.h>
  #include <sys/socket.h>
@@ -49,7 +49,7 @@ Last-Update: 2012-11-16
 --- a/spipe/main.c
 +++ b/spipe/main.c
 @@ -1,3 +1,5 @@
-+#define _GNU_SOURCE
++#define _POSIX_C_SOURCE	200809L
 +
  #include <sys/socket.h>
  
