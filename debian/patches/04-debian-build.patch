@@ -1,0 +1,47 @@
+Description: A cleaner build for the Debian package.
+ - we do not really need anything from librt, so don't link it
+ - use install(1) to install programs, thus taking care of not always
+   stripping the debug symbols, too (leave that to debhelper)
+Forwarded: not-needed
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2012-11-16
+
+--- a/Makefile
++++ b/Makefile
+@@ -10,7 +10,7 @@
+ 	else						\
+ 		CFLAGS="${CFLAGS}";			\
+ 	fi;						\
+-	LDADD_POSIX=`export CC=${CC}; cd POSIX && command -p sh posix-l.sh`;	\
++	unset LDADD_POSIX;				\
+ 	for D in ${PROGS} ${BENCH}; do		\
+ 		( cd $${D} && 					\
+ 		    make CFLAGS="$${CFLAGS}"			\
+--- a/spipe/Makefile
++++ b/spipe/Makefile
+@@ -8,10 +8,7 @@
+ 
+ install:${PROG}
+ 	mkdir -p ${DESTDIR}${BINDIR}
+-	cp ${PROG} ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
+-	    strip ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
+-	    chmod 0555 ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ && \
+-	    mv -f ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ ${DESTDIR}${BINDIR}/${PROG}
++	install -c -o root -g root -m 755 ${PROG} ${DESTDIR}${BINDIR}
+ 
+ clean:
+ 	rm -f ${PROG} ${SRCS:.c=.o}
+--- a/spiped/Makefile
++++ b/spiped/Makefile
+@@ -8,10 +8,7 @@
+ 
+ install:${PROG}
+ 	mkdir -p ${DESTDIR}${BINDIR}
+-	cp ${PROG} ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
+-	    strip ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
+-	    chmod 0555 ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ && \
+-	    mv -f ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ ${DESTDIR}${BINDIR}/${PROG}
++	install -c -o root -g root -m 755 ${PROG} ${DESTDIR}${BINDIR}
+ 
+ clean:
+ 	rm -f ${PROG} ${SRCS:.c=.o}
