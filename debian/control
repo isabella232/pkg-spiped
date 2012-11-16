@@ -11,6 +11,7 @@ Homepage: http://www.tarsnap.com/spiped.html
 Package: spiped
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Multi-Arch: foreign
 Description: create secure pipes between socket addresses
  spiped (pronounced "ess-pipe-dee") is a utility for creating symmetrically
  encrypted and authenticated pipes between socket addresses, so that one may
