@@ -1,0 +1,98 @@
+.Dd November 16, 2012
+.Dt SPIPED 1
+.Os
+.Sh NAME
+.Nm spiped
+.Nd secure pipe daemon
+.Sh SYNOPSIS
+.Nm
+{
+.Fl e | Fl d
+}
+.Fl s Ar source_socket
+.Fl t Ar target_socket
+.Fl k Ar key_file
+.Nm
+{
+.Fl e | Fl d
+}
+.Fl s Ar source_socket
+.Fl t Ar target_socket
+.Fl k Ar key_file
+.Op Fl DfF
+.Op Fl n Ar max_#_connections
+.Op Fl o Ar connection_timeout
+.Op Fl p Ar pidfile
+.Sh OPTIONS
+.Bl -tag -width indent
+.It Fl e
+Take unencrypted connections from the source socket and send
+encrypted connections to the target socket.
+.It Fl d
+Take encrypted connections from the source socket and send
+unencrypted connections to the target socket.
+.It Fl s Ar source_socket
+Address on which
+.Nm
+should listen for incoming connections.
+Must be in one of the following formats:
+.Pa /absolute/path/to/unix/socket ,
+.Ar host.name:port ,
+.Ar [ip.v4.ad.dr]:port ,
+.Ar [ipv6::addr]:port .
+Note that hostnames are resolved when
+.Nm
+is launched and are not
+re-resolved later; thus if DNS entries change
+.Nm
+will continue to
+connect to the expired address.
+.It Fl t Ar target_socket
+Address to which
+.Nm
+should connect.
+.It Fl k Ar key_file
+Use the provided key file to authenticate and encrypt.
+.It Fl D
+Wait for DNS.
+Normally when
+.Nm
+is launched it resolves addresses
+and binds to its source socket before the parent process returns; with
+this option it will daemonize first and retry failed DNS lookups until
+they succeed.
+This allows
+.Nm
+to launch even if DNS isn't set up
+yet, but at the expense of losing the guarantee that once
+.Nm
+has
+finished launching it will be ready to create pipes.
+.It Fl f
+Use fast/weak handshaking: This reduces the CPU time spent in the
+initial connection setup, at the expense of losing perfect forward
+secrecy.
+.It Fl F
+Run in foreground.
+This can be useful with systems like daemontools.
+.It Fl n Ar max_#_connections
+Limit on the number of simultaneous connections allowed.
+Defaults
+to 100 connections.
+.It Fl o Ar connection_timeout
+Timeout, in seconds, after which an attempt to connect to the target
+or a protocol handshake will be aborted (and the connection dropped)
+if not completed.
+Defaults to 5s.
+.It Fl p Ar pidfile
+File to which 
+.Nm spiped Ns 's
+process ID should be written.
+Defaults to
+.Ar source_socket Ns .pid
+(in the current directory if
+.Ar source_socket
+is not an absolute path).
+.El
+.Sh SEE ALSO
+.Xr spipe 1
