@@ -1,4 +1,6 @@
 Description: Fix a couple of compiler warnings.
+ - add a _POSIX_C_SOURCE definition to the C preprocessor flags unless
+   overridden in the make environment
  - undefine the asprintf macro if it is already defined, e.g. in glibc
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: not yet
@@ -16,3 +18,31 @@ Last-Update: 2013-01-25
  #define asprintf compat_asprintf
  
  /**
+--- a/Makefile
++++ b/Makefile
+@@ -2,9 +2,16 @@
+ 
+ PROGS=		spiped spipe
+ BINDIR_DEFAULT=	/usr/local/bin
++CPPFLAGS_STD_DEFAULT=	-D_POSIX_C_SOURCE=200809L
+ CFLAGS_DEFAULT=	-O2
+ 
+ all:
++	if [ -z "${CPPFLAGS_STD}" ]; then		\
++		CPPFLAGS_STD="${CPPFLAGS_STD_DEFAULT}";	\
++	else						\
++		CPPFLAGS_STD="${CPPFLAGS_STD}";		\
++	fi;						\
++	CPPFLAGS="$${CPPFLAGS} $${CPPFLAGS_STD}";	\
+ 	if [ -z "${CFLAGS}" ]; then			\
+ 		CFLAGS=${CFLAGS_DEFAULT};		\
+ 	else						\
+@@ -13,7 +20,7 @@
+ 	LDADD_POSIX=`export CC=${CC}; cd POSIX && command -p sh posix-l.sh`;	\
+ 	for D in ${PROGS} ${BENCH}; do		\
+ 		( cd $${D} && 					\
+-		    make CFLAGS="$${CFLAGS}"			\
++		    make CPPFLAGS="$${CPPFLAGS}" CFLAGS="$${CFLAGS}"		\
+ 			LDADD_POSIX="$${LDADD_POSIX}"		\
+ 			LDADD_EXTRA="${LDADD_EXTRA}" all ) ||	\
+ 		    exit 2;					\
