@@ -1,22 +1,10 @@
 Description: A cleaner build for the Debian package.
- - we do not really need anything from librt, so don't link it
  - use install(1) to install programs, thus taking care of not always
    stripping the debug symbols, too (leave that to debhelper)
 Forwarded: not-needed
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2012-11-16
+Last-Update: 2013-01-25
 
---- a/Makefile
-+++ b/Makefile
-@@ -10,7 +10,7 @@
- 	else						\
- 		CFLAGS="${CFLAGS}";			\
- 	fi;						\
--	LDADD_POSIX=`export CC=${CC}; cd POSIX && command -p sh posix-l.sh`;	\
-+	unset LDADD_POSIX;				\
- 	for D in ${PROGS} ${BENCH}; do		\
- 		( cd $${D} && 					\
- 		    make CFLAGS="$${CFLAGS}"			\
 --- a/spipe/Makefile
 +++ b/spipe/Makefile
 @@ -8,10 +8,7 @@

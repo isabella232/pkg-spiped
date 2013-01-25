@@ -9,6 +9,9 @@ CFLAGS=		$(shell dpkg-buildflags --get CFLAGS)
 CPPFLAGS=	$(shell dpkg-buildflags --get CPPFLAGS)
 LDFLAGS=	$(shell dpkg-buildflags --get LDFLAGS)
 
+CPPFLAGS_STD?=	-D_POSIX_C_SOURCE=200809L
+CPPFLAGS+=	${CPPFLAGS_STD}
+
 CFLAGS+=	-pipe -Wall -W -std=c99 -pedantic -Wbad-function-cast \
 		-Wcast-align -Wcast-qual -Wchar-subscripts -Winline \
 		-Wmissing-prototypes -Wnested-externs -Wpointer-arith \
