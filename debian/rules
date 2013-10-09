@@ -23,4 +23,4 @@ export CFLAGS CPPFLAGS LDFLAGS
 	dh $@ 
 
 override_dh_auto_install:
-	dh_auto_install -- BINDIR=/usr/bin
+	dh_auto_install -- BINDIR=/usr/bin MAN1DIR=/usr/share/man/man1

@@ -1,13 +1,14 @@
 Description: A cleaner build for the Debian package.
- - use install(1) to install programs, thus taking care of not always
-   stripping the debug symbols, too (leave that to debhelper)
+ - use install(1) to install programs and manual pages, thus taking care
+   of not always stripping the debug symbols, too (leave that to
+   debhelper)
 Forwarded: not-needed
 Author: Peter Pentchev <roam@ringlet.net>
-Last-Update: 2013-01-25
+Last-Update: 2013-10-09
 
 --- a/spipe/Makefile
 +++ b/spipe/Makefile
-@@ -8,10 +8,7 @@
+@@ -9,15 +9,10 @@
  
  install:${PROG}
  	mkdir -p ${DESTDIR}${BINDIR}
@@ -16,12 +17,18 @@ Last-Update: 2013-01-25
 -	    chmod 0555 ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ && \
 -	    mv -f ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ ${DESTDIR}${BINDIR}/${PROG}
 +	install -c -o root -g root -m 755 ${PROG} ${DESTDIR}${BINDIR}
+ 	if ! [ -z "${MAN1DIR}" ]; then			\
+ 		for MPAGE in ${MAN1}; do						\
+-			cp $$MPAGE ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&			\
+-			    chmod 0444 ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&		\
+-			    mv -f ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ ${DESTDIR}${MAN1DIR}/$$MPAGE;	\
++			install -c -o root -g root -m 644 $$MPAGE ${DESTDIR}${MAN1DIR};	\
+ 		done;									\
+ 	fi
  
- clean:
- 	rm -f ${PROG} ${SRCS:.c=.o}
 --- a/spiped/Makefile
 +++ b/spiped/Makefile
-@@ -8,10 +8,7 @@
+@@ -9,15 +9,10 @@
  
  install:${PROG}
  	mkdir -p ${DESTDIR}${BINDIR}
@@ -30,6 +37,12 @@ Last-Update: 2013-01-25
 -	    chmod 0555 ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ && \
 -	    mv -f ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ ${DESTDIR}${BINDIR}/${PROG}
 +	install -c -o root -g root -m 755 ${PROG} ${DESTDIR}${BINDIR}
+ 	if ! [ -z "${MAN1DIR}" ]; then			\
+ 		for MPAGE in ${MAN1}; do						\
+-			cp $$MPAGE ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&			\
+-			    chmod 0444 ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&		\
+-			    mv -f ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ ${DESTDIR}${MAN1DIR}/$$MPAGE;	\
++			install -c -o root -g root -m 644 $$MPAGE ${DESTDIR}${MAN1DIR};	\
+ 		done;									\
+ 	fi
  
- clean:
- 	rm -f ${PROG} ${SRCS:.c=.o}

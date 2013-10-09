@@ -1,11 +1,11 @@
 Description: Honor the compiler and linker flags in the environment.
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: not yet
-Last-Update: 2012-11-15
+Last-Update: 2013-10-09
 
 --- a/spipe/Makefile
 +++ b/spipe/Makefile
-@@ -17,57 +17,57 @@
+@@ -25,59 +25,59 @@
  	rm -f ${PROG} ${SRCS:.c=.o}
  
  ${PROG}:${SRCS:.c=.o}
@@ -13,86 +13,89 @@ Last-Update: 2012-11-15
 +	${CC} -o ${PROG} ${SRCS:.c=.o} ${LDFLAGS} ${LDADD_EXTRA} ${LDADD_REQ} ${LDADD_POSIX}
  
  main.o: main.c
--	${CC} ${CFLAGS} ${IDIRS} -c main.c -o main.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c main.c -o main.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c main.c -o main.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c main.c -o main.o
  pushbits.o: pushbits.c
--	${CC} ${CFLAGS} ${IDIRS} -c pushbits.c -o pushbits.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c pushbits.c -o pushbits.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c pushbits.c -o pushbits.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c pushbits.c -o pushbits.o
  proto_conn.o: ../proto/proto_conn.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../proto/proto_conn.c -o proto_conn.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_conn.c -o proto_conn.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../proto/proto_conn.c -o proto_conn.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_conn.c -o proto_conn.o
  proto_crypt.o: ../proto/proto_crypt.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../proto/proto_crypt.c -o proto_crypt.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_crypt.c -o proto_crypt.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../proto/proto_crypt.c -o proto_crypt.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_crypt.c -o proto_crypt.o
  proto_handshake.o: ../proto/proto_handshake.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../proto/proto_handshake.c -o proto_handshake.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_handshake.c -o proto_handshake.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../proto/proto_handshake.c -o proto_handshake.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_handshake.c -o proto_handshake.o
  proto_pipe.o: ../proto/proto_pipe.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../proto/proto_pipe.c -o proto_pipe.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_pipe.c -o proto_pipe.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../proto/proto_pipe.c -o proto_pipe.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_pipe.c -o proto_pipe.o
  sha256.o: ../lib/alg/sha256.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/alg/sha256.c -o sha256.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/alg/sha256.c -o sha256.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/alg/sha256.c -o sha256.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/alg/sha256.c -o sha256.o
  elasticarray.o: ../lib/datastruct/elasticarray.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/elasticarray.c -o elasticarray.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/elasticarray.c -o elasticarray.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/datastruct/elasticarray.c -o elasticarray.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/elasticarray.c -o elasticarray.o
  ptrheap.o: ../lib/datastruct/ptrheap.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/ptrheap.c -o ptrheap.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/ptrheap.c -o ptrheap.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/datastruct/ptrheap.c -o ptrheap.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/ptrheap.c -o ptrheap.o
  timerqueue.o: ../lib/datastruct/timerqueue.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/timerqueue.c -o timerqueue.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/timerqueue.c -o timerqueue.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/datastruct/timerqueue.c -o timerqueue.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/timerqueue.c -o timerqueue.o
  asprintf.o: ../lib/util/asprintf.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/asprintf.c -o asprintf.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/asprintf.c -o asprintf.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/asprintf.c -o asprintf.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/asprintf.c -o asprintf.o
  entropy.o: ../lib/util/entropy.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/entropy.c -o entropy.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/entropy.c -o entropy.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/entropy.c -o entropy.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/entropy.c -o entropy.o
  monoclock.o: ../lib/util/monoclock.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/monoclock.c -o monoclock.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/monoclock.c -o monoclock.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/monoclock.c -o monoclock.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/monoclock.c -o monoclock.o
+ noeintr.o: ../lib/util/noeintr.c
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/noeintr.c -o noeintr.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/noeintr.c -o noeintr.o
  sock.o: ../lib/util/sock.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/sock.c -o sock.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/sock.c -o sock.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/sock.c -o sock.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/sock.c -o sock.o
  warnp.o: ../lib/util/warnp.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/warnp.c -o warnp.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/warnp.c -o warnp.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/warnp.c -o warnp.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/warnp.c -o warnp.o
  events_immediate.o: ../lib/events/events_immediate.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/events/events_immediate.c -o events_immediate.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_immediate.c -o events_immediate.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/events/events_immediate.c -o events_immediate.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_immediate.c -o events_immediate.o
  events_network.o: ../lib/events/events_network.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/events/events_network.c -o events_network.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_network.c -o events_network.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/events/events_network.c -o events_network.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_network.c -o events_network.o
  events_timer.o: ../lib/events/events_timer.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/events/events_timer.c -o events_timer.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_timer.c -o events_timer.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/events/events_timer.c -o events_timer.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_timer.c -o events_timer.o
  events.o: ../lib/events/events.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/events/events.c -o events.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events.c -o events.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/events/events.c -o events.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events.c -o events.o
  network_buf.o: ../lib/network/network_buf.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/network/network_buf.c -o network_buf.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_buf.c -o network_buf.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/network/network_buf.c -o network_buf.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_buf.c -o network_buf.o
  network_connect.o: ../lib/network/network_connect.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/network/network_connect.c -o network_connect.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_connect.c -o network_connect.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/network/network_connect.c -o network_connect.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_connect.c -o network_connect.o
  crypto_aesctr.o: ../lib/crypto/crypto_aesctr.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_aesctr.c -o crypto_aesctr.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_aesctr.c -o crypto_aesctr.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_aesctr.c -o crypto_aesctr.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_aesctr.c -o crypto_aesctr.o
  crypto_dh.o: ../lib/crypto/crypto_dh.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh.c -o crypto_dh.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh.c -o crypto_dh.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_dh.c -o crypto_dh.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh.c -o crypto_dh.o
  crypto_dh_group14.o: ../lib/crypto/crypto_dh_group14.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh_group14.c -o crypto_dh_group14.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh_group14.c -o crypto_dh_group14.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_dh_group14.c -o crypto_dh_group14.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh_group14.c -o crypto_dh_group14.o
  crypto_entropy.o: ../lib/crypto/crypto_entropy.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_entropy.c -o crypto_entropy.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_entropy.c -o crypto_entropy.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_entropy.c -o crypto_entropy.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_entropy.c -o crypto_entropy.o
  crypto_verify_bytes.o: ../lib/crypto/crypto_verify_bytes.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o
 --- a/spiped/Makefile
 +++ b/spiped/Makefile
-@@ -17,61 +17,61 @@
+@@ -25,67 +25,67 @@
  	rm -f ${PROG} ${SRCS:.c=.o}
  
  ${PROG}:${SRCS:.c=.o}
@@ -100,86 +103,95 @@ Last-Update: 2012-11-15
 +	${CC} -o ${PROG} ${SRCS:.c=.o} ${LDFLAGS} ${LDADD_EXTRA} ${LDADD_REQ} ${LDADD_POSIX}
  
  main.o: main.c
--	${CC} ${CFLAGS} ${IDIRS} -c main.c -o main.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c main.c -o main.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c main.c -o main.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c main.c -o main.o
  dispatch.o: dispatch.c
--	${CC} ${CFLAGS} ${IDIRS} -c dispatch.c -o dispatch.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c dispatch.c -o dispatch.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c dispatch.c -o dispatch.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c dispatch.c -o dispatch.o
  proto_conn.o: ../proto/proto_conn.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../proto/proto_conn.c -o proto_conn.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_conn.c -o proto_conn.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../proto/proto_conn.c -o proto_conn.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_conn.c -o proto_conn.o
  proto_crypt.o: ../proto/proto_crypt.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../proto/proto_crypt.c -o proto_crypt.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_crypt.c -o proto_crypt.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../proto/proto_crypt.c -o proto_crypt.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_crypt.c -o proto_crypt.o
  proto_handshake.o: ../proto/proto_handshake.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../proto/proto_handshake.c -o proto_handshake.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_handshake.c -o proto_handshake.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../proto/proto_handshake.c -o proto_handshake.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_handshake.c -o proto_handshake.o
  proto_pipe.o: ../proto/proto_pipe.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../proto/proto_pipe.c -o proto_pipe.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_pipe.c -o proto_pipe.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../proto/proto_pipe.c -o proto_pipe.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../proto/proto_pipe.c -o proto_pipe.o
  sha256.o: ../lib/alg/sha256.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/alg/sha256.c -o sha256.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/alg/sha256.c -o sha256.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/alg/sha256.c -o sha256.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/alg/sha256.c -o sha256.o
  elasticarray.o: ../lib/datastruct/elasticarray.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/elasticarray.c -o elasticarray.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/elasticarray.c -o elasticarray.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/datastruct/elasticarray.c -o elasticarray.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/elasticarray.c -o elasticarray.o
  ptrheap.o: ../lib/datastruct/ptrheap.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/ptrheap.c -o ptrheap.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/ptrheap.c -o ptrheap.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/datastruct/ptrheap.c -o ptrheap.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/ptrheap.c -o ptrheap.o
  timerqueue.o: ../lib/datastruct/timerqueue.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/timerqueue.c -o timerqueue.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/timerqueue.c -o timerqueue.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/datastruct/timerqueue.c -o timerqueue.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/datastruct/timerqueue.c -o timerqueue.o
+ dnsthread.o: ../lib/dnsthread/dnsthread.c
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/dnsthread/dnsthread.c -o dnsthread.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/dnsthread/dnsthread.c -o dnsthread.o
  asprintf.o: ../lib/util/asprintf.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/asprintf.c -o asprintf.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/asprintf.c -o asprintf.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/asprintf.c -o asprintf.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/asprintf.c -o asprintf.o
  daemonize.o: ../lib/util/daemonize.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/daemonize.c -o daemonize.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/daemonize.c -o daemonize.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/daemonize.c -o daemonize.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/daemonize.c -o daemonize.o
  entropy.o: ../lib/util/entropy.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/entropy.c -o entropy.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/entropy.c -o entropy.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/entropy.c -o entropy.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/entropy.c -o entropy.o
  monoclock.o: ../lib/util/monoclock.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/monoclock.c -o monoclock.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/monoclock.c -o monoclock.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/monoclock.c -o monoclock.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/monoclock.c -o monoclock.o
+ noeintr.o: ../lib/util/noeintr.c
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/noeintr.c -o noeintr.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/noeintr.c -o noeintr.o
  sock.o: ../lib/util/sock.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/sock.c -o sock.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/sock.c -o sock.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/sock.c -o sock.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/sock.c -o sock.o
+ sock_util.o: ../lib/util/sock_util.c
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/sock_util.c -o sock_util.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/sock_util.c -o sock_util.o
  warnp.o: ../lib/util/warnp.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/util/warnp.c -o warnp.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/warnp.c -o warnp.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/util/warnp.c -o warnp.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/util/warnp.c -o warnp.o
  events_immediate.o: ../lib/events/events_immediate.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/events/events_immediate.c -o events_immediate.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_immediate.c -o events_immediate.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/events/events_immediate.c -o events_immediate.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_immediate.c -o events_immediate.o
  events_network.o: ../lib/events/events_network.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/events/events_network.c -o events_network.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_network.c -o events_network.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/events/events_network.c -o events_network.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_network.c -o events_network.o
  events_timer.o: ../lib/events/events_timer.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/events/events_timer.c -o events_timer.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_timer.c -o events_timer.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/events/events_timer.c -o events_timer.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events_timer.c -o events_timer.o
  events.o: ../lib/events/events.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/events/events.c -o events.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events.c -o events.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/events/events.c -o events.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/events/events.c -o events.o
  network_accept.o: ../lib/network/network_accept.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/network/network_accept.c -o network_accept.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_accept.c -o network_accept.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/network/network_accept.c -o network_accept.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_accept.c -o network_accept.o
  network_buf.o: ../lib/network/network_buf.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/network/network_buf.c -o network_buf.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_buf.c -o network_buf.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/network/network_buf.c -o network_buf.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_buf.c -o network_buf.o
  network_connect.o: ../lib/network/network_connect.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/network/network_connect.c -o network_connect.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_connect.c -o network_connect.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/network/network_connect.c -o network_connect.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/network/network_connect.c -o network_connect.o
  crypto_aesctr.o: ../lib/crypto/crypto_aesctr.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_aesctr.c -o crypto_aesctr.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_aesctr.c -o crypto_aesctr.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_aesctr.c -o crypto_aesctr.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_aesctr.c -o crypto_aesctr.o
  crypto_dh.o: ../lib/crypto/crypto_dh.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh.c -o crypto_dh.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh.c -o crypto_dh.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_dh.c -o crypto_dh.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh.c -o crypto_dh.o
  crypto_dh_group14.o: ../lib/crypto/crypto_dh_group14.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh_group14.c -o crypto_dh_group14.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh_group14.c -o crypto_dh_group14.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_dh_group14.c -o crypto_dh_group14.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_dh_group14.c -o crypto_dh_group14.o
  crypto_entropy.o: ../lib/crypto/crypto_entropy.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_entropy.c -o crypto_entropy.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_entropy.c -o crypto_entropy.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_entropy.c -o crypto_entropy.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_entropy.c -o crypto_entropy.o
  crypto_verify_bytes.o: ../lib/crypto/crypto_verify_bytes.c
--	${CC} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o
-+	${CC} ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o
+-	${CC} ${CFLAGS} -D_POSIX_C_SOURCE=200809L ${IDIRS} -c ../lib/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o
++	${CC} -D_POSIX_C_SOURCE=200809L ${CPPFLAGS} ${CFLAGS} ${IDIRS} -c ../lib/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o

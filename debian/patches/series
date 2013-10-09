@@ -1,4 +1,5 @@
 01-honor-destdir.patch
 02-honor-compiler-flags.patch
-03-warnings.patch
 04-debian-build.patch
+xx-noeintr-stdint.patch
+05-mkdir-p.patch

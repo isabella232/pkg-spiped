@@ -1,0 +1,25 @@
+Description: Create the manual pages directory.
+Author: Peter Pentchev <roam@ringlet.net>
+Forwarded: not yet
+Last-Update: 2013-10-09
+
+--- a/spipe/Makefile
++++ b/spipe/Makefile
+@@ -11,6 +11,7 @@
+ 	mkdir -p ${DESTDIR}${BINDIR}
+ 	install -c -o root -g root -m 755 ${PROG} ${DESTDIR}${BINDIR}
+ 	if ! [ -z "${MAN1DIR}" ]; then			\
++		mkdir -p ${DESTDIR}${MAN1DIR};		\
+ 		for MPAGE in ${MAN1}; do						\
+ 			install -c -o root -g root -m 644 $$MPAGE ${DESTDIR}${MAN1DIR};	\
+ 		done;									\
+--- a/spiped/Makefile
++++ b/spiped/Makefile
+@@ -11,6 +11,7 @@
+ 	mkdir -p ${DESTDIR}${BINDIR}
+ 	install -c -o root -g root -m 755 ${PROG} ${DESTDIR}${BINDIR}
+ 	if ! [ -z "${MAN1DIR}" ]; then			\
++		mkdir -p ${DESTDIR}${MAN1DIR};		\
+ 		for MPAGE in ${MAN1}; do						\
+ 			install -c -o root -g root -m 644 $$MPAGE ${DESTDIR}${MAN1DIR};	\
+ 		done;									\

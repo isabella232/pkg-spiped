@@ -1,11 +1,11 @@
 Description: Honor DESTDIR during installation.
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: not yet
-Last-Update: 2012-11-15
+Last-Update: 2013-10-09
 
 --- a/spiped/Makefile
 +++ b/spiped/Makefile
-@@ -7,11 +7,11 @@
+@@ -8,16 +8,16 @@
  all:	${PROG}
  
  install:${PROG}
@@ -19,12 +19,20 @@ Last-Update: 2012-11-15
 +	    strip ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
 +	    chmod 0555 ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ && \
 +	    mv -f ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ ${DESTDIR}${BINDIR}/${PROG}
+ 	if ! [ -z "${MAN1DIR}" ]; then			\
+ 		for MPAGE in ${MAN1}; do						\
+-			cp $$MPAGE ${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&			\
+-			    chmod 0444 ${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&		\
+-			    mv -f ${MAN1DIR}/_inst.$$MPAGE.$$$$_ ${MAN1DIR}/$$MPAGE;	\
++			cp $$MPAGE ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&			\
++			    chmod 0444 ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&		\
++			    mv -f ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ ${DESTDIR}${MAN1DIR}/$$MPAGE;	\
+ 		done;									\
+ 	fi
  
- clean:
- 	rm -f ${PROG} ${SRCS:.c=.o}
 --- a/spipe/Makefile
 +++ b/spipe/Makefile
-@@ -7,11 +7,11 @@
+@@ -8,16 +8,16 @@
  all:	${PROG}
  
  install:${PROG}
@@ -38,6 +46,14 @@ Last-Update: 2012-11-15
 +	    strip ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ &&	\
 +	    chmod 0555 ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ && \
 +	    mv -f ${DESTDIR}${BINDIR}/_inst.${PROG}.$$$$_ ${DESTDIR}${BINDIR}/${PROG}
+ 	if ! [ -z "${MAN1DIR}" ]; then			\
+ 		for MPAGE in ${MAN1}; do						\
+-			cp $$MPAGE ${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&			\
+-			    chmod 0444 ${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&		\
+-			    mv -f ${MAN1DIR}/_inst.$$MPAGE.$$$$_ ${MAN1DIR}/$$MPAGE;	\
++			cp $$MPAGE ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&			\
++			    chmod 0444 ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ &&		\
++			    mv -f ${DESTDIR}${MAN1DIR}/_inst.$$MPAGE.$$$$_ ${DESTDIR}${MAN1DIR}/$$MPAGE;	\
+ 		done;									\
+ 	fi
  
- clean:
- 	rm -f ${PROG} ${SRCS:.c=.o}
