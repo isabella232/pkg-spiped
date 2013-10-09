@@ -1,9 +1,12 @@
+#include <sys/socket.h>
+
 #include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 
 #include "events.h"
 #include "network.h"
+#include "sock.h"
 
 #include "proto_handshake.h"
 #include "proto_pipe.h"
@@ -14,8 +17,10 @@
 struct conn_state {
 	int (* callback_dead)(void *);
 	void * cookie;
+	struct sock_addr ** sas;
 	int decr;
 	int nofps;
+	int nokeepalive;
 	const struct proto_secret * K;
 	double timeo;
 	int s;
@@ -69,6 +74,17 @@ err0:
 static int
 launchpipes(struct conn_state * C)
 {
+	int on = C->nokeepalive ? 0 : 1;
+
+	/*
+	 * Attempt to turn keepalives on or off as requested.  We ignore
+	 * failures here since the sockets might not be of a type for which
+	 * SO_KEEPALIVE is valid -- it is a socket level option, but protocol
+	 * specific.  In particular, it has no sensible meaning for UNIX
+	 * sockets.
+	 */
+	setsockopt(C->s, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof(on));
+	setsockopt(C->t, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof(on));
 
 	/* Create two pipes. */
 	if ((C->pipe_f = proto_pipe(C->s, C->t, C->decr, C->k_f,
@@ -103,6 +119,9 @@ dropconn(struct conn_state * C)
 	if (C->connect_cookie != NULL)
 		network_connect_cancel(C->connect_cookie);
 
+	/* Free the target addresses if we haven't already done so. */
+	sock_addr_freelist(C->sas);
+
 	/* Stop handshaking if a handshake is in progress. */
 	if (C->handshake_cookie != NULL)
 		proto_handshake_cancel(C->handshake_cookie);
@@ -134,17 +153,20 @@ dropconn(struct conn_state * C)
 }
 
 /**
- * proto_conn_create(s, sas, decr, nofps, K, timeo, callback_dead, cookie):
+ * proto_conn_create(s, sas, decr, nofps, nokeepalive, K, timeo,
+ *     callback_dead, cookie):
  * Create a connection with one end at ${s} and the other end connecting to
  * the target addresses ${sas}.  If ${decr} is 0, encrypt the outgoing data;
  * if ${decr} is nonzero, decrypt the outgoing data.  If ${nofps} is non-zero,
- * don't use perfect forward secrecy.  Drop the connection if the handshake or
- * connecting to the target takes more than ${timeo} seconds.  When the
- * connection is dropped, invoke ${callback_dead}(${cookie}).
+ * don't use perfect forward secrecy.  Enable transport layer keep-alives (if
+ * applicable) on both sockets if and only if ${nokeepalive} is zero.  Drop the
+ * connection if the handshake or connecting to the target takes more than
+ * ${timeo} seconds.  When the connection is dropped, invoke
+ * ${callback_dead}(${cookie}).  Free ${sas} once it is no longer needed.
  */
 int
-proto_conn_create(int s, struct sock_addr * const * sas, int decr, int nofps,
-    const struct proto_secret * K, double timeo,
+proto_conn_create(int s, struct sock_addr ** sas, int decr, int nofps,
+    int nokeepalive, const struct proto_secret * K, double timeo,
     int (* callback_dead)(void *), void * cookie)
 {
 	struct conn_state * C;
@@ -154,8 +176,10 @@ proto_conn_create(int s, struct sock_addr * const * sas, int decr, int nofps,
 		goto err0;
 	C->callback_dead = callback_dead;
 	C->cookie = cookie;
+	C->sas = sas;
 	C->decr = decr;
 	C->nofps = nofps;
+	C->nokeepalive = nokeepalive;
 	C->K = K;
 	C->timeo = timeo;
 	C->s = s;
@@ -174,7 +198,7 @@ proto_conn_create(int s, struct sock_addr * const * sas, int decr, int nofps,
 
 	/* Connect to target. */
 	if ((C->connect_cookie =
-	    network_connect(sas, callback_connect_done, C)) == NULL)
+	    network_connect(C->sas, callback_connect_done, C)) == NULL)
 		goto err2;
 
 	/* If we're decrypting, start the handshake. */
@@ -205,6 +229,10 @@ callback_connect_done(void * cookie, int t)
 
 	/* This connection attempt is no longer pending. */
 	C->connect_cookie = NULL;
+
+	/* Don't need the target address any more. */
+	sock_addr_freelist(C->sas);
+	C->sas = NULL;
 
 	/* We beat the clock. */
 	events_timer_cancel(C->connect_timeout_cookie);
@@ -244,6 +272,12 @@ callback_connect_timeout(void * cookie)
 
 	/* This timeout is no longer pending. */
 	C->connect_timeout_cookie = NULL;
+
+	/*
+	 * We could free C->sas here, but from a semantic point of view it
+	 * could still be in use by the not-yet-cancelled connect operation.
+	 * Instead, we free it in dropconn, after cancelling the connect.
+	 */
 
 	/* Drop the connection. */
 	return (dropconn(C));

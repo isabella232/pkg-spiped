@@ -11,11 +11,10 @@ all:
 		CFLAGS="${CFLAGS}";			\
 	fi;						\
 	LDADD_POSIX=`export CC=${CC}; cd POSIX && command -p sh posix-l.sh`;	\
-	for D in ${PROGS} ${BENCH}; do		\
+	for D in ${PROGS}; do					\
 		( cd $${D} && 					\
 		    make CFLAGS="$${CFLAGS}"			\
-			LDADD_POSIX="$${LDADD_POSIX}"		\
-			LDADD_EXTRA="${LDADD_EXTRA}" all ) ||	\
+			LDADD_POSIX="$${LDADD_POSIX}" all ) ||	\
 		    exit 2;					\
 	done
 
@@ -30,6 +29,6 @@ install: all
 	done
 
 clean:
-	for D in ${PROGS} ${BENCH}; do		\
+	for D in ${PROGS}; do				\
 		( cd $${D} && make clean ) || exit 2;	\
 	done
