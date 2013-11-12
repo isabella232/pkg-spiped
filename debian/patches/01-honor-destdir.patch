@@ -1,6 +1,6 @@
 Description: Honor DESTDIR during installation.
 Author: Peter Pentchev <roam@ringlet.net>
-Forwarded: not yet
+Forwarded: http://mail.tarsnap.com/spiped/msg00044.html
 Last-Update: 2013-10-09
 
 --- a/spiped/Makefile

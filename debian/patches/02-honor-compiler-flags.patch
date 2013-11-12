@@ -1,6 +1,6 @@
 Description: Honor the compiler and linker flags in the environment.
 Author: Peter Pentchev <roam@ringlet.net>
-Forwarded: not yet
+Forwarded: http://mail.tarsnap.com/spiped/msg00044.html
 Last-Update: 2013-10-09
 
 --- a/spipe/Makefile
