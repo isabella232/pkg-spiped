@@ -12,7 +12,7 @@ DEB_CFLAGS_MAINT_APPEND=	-pipe -Wall -W -std=c99 -pedantic -Wbad-function-cast \
 		-Wmissing-prototypes -Wnested-externs -Wpointer-arith \
 		-Wredundant-decls -Wshadow -Wstrict-prototypes -Wwrite-strings
 ifneq (,$(filter werror,$(DEB_BUILD_OPTIONS)))
-	DEP_CFLAGS_MAINT_APPEND+=	-Werror
+DEB_CFLAGS_MAINT_APPEND+=	-Werror
 endif
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CPPFLAGS_MAINT_APPEND DEB_CFLAGS_MAINT_APPEND

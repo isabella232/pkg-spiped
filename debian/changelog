@@ -1,3 +1,10 @@
+spiped (1.3.1-2) UNRELEASED; urgency=medium
+
+  * Fix a minor debian/rules typo: actually add -Werror to the compiler
+    flags if requested using "werror" in DEB_BUILD_OPTIONS.
+
+ -- Peter Pentchev <roam@ringlet.net>  Mon, 24 Feb 2014 11:40:11 +0200
+
 spiped (1.3.1-1) unstable; urgency=low
 
   * Initial release.  Closes: #693310
