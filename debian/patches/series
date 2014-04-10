@@ -2,3 +2,4 @@
 02-honor-compiler-flags.patch
 04-debian-build.patch
 05-mkdir-p.patch
+06-manpage-version.patch
