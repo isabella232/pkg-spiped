@@ -9,6 +9,7 @@ spiped (1.4.0-1) UNRELEASED; urgency=medium
     - update the 02-honor-compiler-flags and the 06-manpage-version patches
     - add the 07-manpage-dashes patch to escape dashes in the description
       of the newly-added -g command-line option
+    - update the upstream copyright years
 
  -- Peter Pentchev <roam@ringlet.net>  Tue, 02 Sep 2014 15:43:58 +0300
 

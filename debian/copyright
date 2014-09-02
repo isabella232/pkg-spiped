@@ -5,7 +5,9 @@ Source: http://www.tarsnap.com/spiped.html
 License: BSD-2
 
 Files: *
-Copyright: 2005-2013 Colin Percival.  All rights reserved.
+Copyright:
+ Copyright 2005-2014 Colin Percival.  All rights reserved.
+ Copyright 2014 Sean Kelly.  All rights reserved.
 License: BSD-2
 
 Files: spipe/spipe.1 spiped/spiped.1
