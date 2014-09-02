@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <openssl/aes.h>
-
+#include "crypto_aes.h"
 #include "crypto_aesctr.h"
 #include "crypto_verify_bytes.h"
 #include "sha256.h"
@@ -19,7 +18,7 @@ struct proto_secret {
 };
 
 struct proto_keys {
-	AES_KEY k_aes;
+	struct crypto_aes_key * k_aes;
 	uint8_t k_hmac[32];
 	uint64_t pnum;
 };
@@ -38,10 +37,8 @@ mkkeypair(uint8_t kbuf[64])
 		goto err0;
 
 	/* Expand the AES key. */
-	if (AES_set_encrypt_key(&kbuf[0], 256, &k->k_aes)) {
-		warn0("Error in AES_set_encrypt_key");
+	if ((k->k_aes = crypto_aes_key_expand(&kbuf[0], 32)) == NULL)
 		goto err1;
-	}
 
 	/* Fill in HMAC key. */
 	memcpy(k->k_hmac, &kbuf[32], 32);
@@ -90,7 +87,7 @@ proto_crypt_secret(const char * filename)
 		SHA256_Update(&ctx, buf, lenread);
 
 	/* Did we hit EOF? */
-	if (! feof(f)) {
+	if (!feof(f)) {
 		warnp("Error reading file: %s", filename);
 		goto err2;
 	}
@@ -120,7 +117,8 @@ err0:
  * keys ${dhmac_l} and ${dhmac_r}.  If ${decr} is non-zero, "local" == "S"
  * and "remote" == "C"; otherwise the assignments are opposite.
  */
-void proto_crypt_dhmac(const struct proto_secret * K,
+void
+proto_crypt_dhmac(const struct proto_secret * K,
     const uint8_t nonce_l[PCRYPT_NONCE_LEN],
     const uint8_t nonce_r[PCRYPT_NONCE_LEN],
     uint8_t dhmac_l[PCRYPT_DHMAC_LEN], uint8_t dhmac_r[PCRYPT_DHMAC_LEN],
@@ -128,31 +126,56 @@ void proto_crypt_dhmac(const struct proto_secret * K,
 {
 	uint8_t nonce_CS[PCRYPT_NONCE_LEN * 2];
 	uint8_t dk_1[PCRYPT_DHMAC_LEN * 2];
+	const uint8_t * nonce_c, * nonce_s;
+	uint8_t * dhmac_c, * dhmac_s;
+
+	/* Figure out how {c, s} maps to {l, r}. */
+	nonce_c = decr ? nonce_r : nonce_l;
+	dhmac_c = decr ? dhmac_r : dhmac_l;
+	nonce_s = decr ? nonce_l : nonce_r;
+	dhmac_s = decr ? dhmac_l : dhmac_r;
 
 	/* Copy in nonces (in the right order). */
-	memcpy(&nonce_CS[0], decr ? nonce_r : nonce_l, PCRYPT_NONCE_LEN);
-	memcpy(&nonce_CS[PCRYPT_NONCE_LEN], decr ? nonce_l : nonce_r,
-	    PCRYPT_NONCE_LEN);
+	memcpy(&nonce_CS[0], nonce_c, PCRYPT_NONCE_LEN);
+	memcpy(&nonce_CS[PCRYPT_NONCE_LEN], nonce_s, PCRYPT_NONCE_LEN);
 
 	/* Compute dk_1. */
 	PBKDF2_SHA256(K->K, 32, nonce_CS, PCRYPT_NONCE_LEN * 2, 1,
 	    dk_1, PCRYPT_DHMAC_LEN * 2);
 
 	/* Copy out diffie-hellman parameter MAC keys (in the right order). */
-	memcpy(decr ? dhmac_r : dhmac_l, &dk_1[0], PCRYPT_DHMAC_LEN);
-	memcpy(decr ? dhmac_l : dhmac_r, &dk_1[PCRYPT_DHMAC_LEN],
-	    PCRYPT_DHMAC_LEN);
+	memcpy(dhmac_c, &dk_1[0], PCRYPT_DHMAC_LEN);
+	memcpy(dhmac_s, &dk_1[PCRYPT_DHMAC_LEN], PCRYPT_DHMAC_LEN);
 }
 
 /**
- * proto_crypt_dh_validate(yh_r, dhmac_r):
+ * is_not_one(x, len):
+ * Returns non-zero if the big-endian value stored at (${x}, ${len}) is not
+ * equal to 1.
+ */
+static int
+is_not_one(const uint8_t * x, size_t len)
+{
+	size_t i;
+	char y;
+
+	for (i = 0, y = 0; i < len - 1; i++) {
+		y |= x[i];
+	}
+
+	return (y | (x[len - 1] - 1));
+}
+
+/**
+ * proto_crypt_dh_validate(yh_r, dhmac_r, requirefps):
  * Return non-zero if the value ${yh_r} received from the remote party is not
  * correctly MACed using the diffie-hellman parameter MAC key ${dhmac_r}, or
- * if the included y value is >= the diffie-hellman group modulus.
+ * if the included y value is >= the diffie-hellman group modulus, or if
+ * ${requirefps} is non-zero and the included y value is 1.
  */
 int
 proto_crypt_dh_validate(const uint8_t yh_r[PCRYPT_YH_LEN],
-    const uint8_t dhmac_r[PCRYPT_DHMAC_LEN])
+    const uint8_t dhmac_r[PCRYPT_DHMAC_LEN], int requirefps)
 {
 	uint8_t hbuf[32];
 
@@ -165,7 +188,17 @@ proto_crypt_dh_validate(const uint8_t yh_r[PCRYPT_YH_LEN],
 		return (1);
 
 	/* Sanity-check the diffie-hellman value. */
-	return (crypto_dh_sanitycheck(&yh_r[0]));
+	if (crypto_dh_sanitycheck(&yh_r[0]))
+		return (1);
+
+	/* If necessary, enforce that the diffie-hellman value is != 1. */
+	if (requirefps) {
+		if (! is_not_one(&yh_r[0], CRYPTO_DH_PUBLEN))
+			return (1);
+	}
+
+	/* Everything is good. */
+	return (0);
 }
 
 /**
@@ -221,11 +254,13 @@ proto_crypt_mkkeys(const struct proto_secret * K,
 {
 	uint8_t nonce_y[PCRYPT_NONCE_LEN * 2 + CRYPTO_DH_KEYLEN];
 	uint8_t dk_2[128];
+	const uint8_t * nonce_c, * nonce_s;
 
 	/* Copy in nonces (in the right order). */
-	memcpy(&nonce_y[0], decr ? nonce_r : nonce_l, PCRYPT_NONCE_LEN);
-	memcpy(&nonce_y[PCRYPT_NONCE_LEN], decr ? nonce_l : nonce_r,
-	    PCRYPT_NONCE_LEN);
+	nonce_c = decr ? nonce_r : nonce_l;
+	nonce_s = decr ? nonce_l : nonce_r;
+	memcpy(&nonce_y[0], nonce_c, PCRYPT_NONCE_LEN);
+	memcpy(&nonce_y[PCRYPT_NONCE_LEN], nonce_s, PCRYPT_NONCE_LEN);
 
 	/* Are we bypassing the diffie-hellman computation? */
 	if (nofps) {
@@ -285,7 +320,7 @@ proto_crypt_enc(uint8_t * ibuf, size_t len, uint8_t obuf[PCRYPT_ESZ],
 	be32enc(&obuf[PCRYPT_MAXDSZ], len);
 
 	/* Encrypt the buffer in-place. */
-	crypto_aesctr_buf(&k->k_aes, k->pnum, obuf, obuf, PCRYPT_MAXDSZ + 4);
+	crypto_aesctr_buf(k->k_aes, k->pnum, obuf, obuf, PCRYPT_MAXDSZ + 4);
 
 	/* Append an HMAC. */
 	be64enc(pnum_exp, k->pnum);
@@ -322,7 +357,7 @@ ssize_t proto_crypt_dec(uint8_t ibuf[PCRYPT_ESZ], uint8_t * obuf,
 		return (-1);
 
 	/* Decrypt the buffer in-place. */
-	crypto_aesctr_buf(&k->k_aes, k->pnum, ibuf, ibuf, PCRYPT_MAXDSZ + 4);
+	crypto_aesctr_buf(k->k_aes, k->pnum, ibuf, ibuf, PCRYPT_MAXDSZ + 4);
 
 	/* Increment packet number. */
 	k->pnum += 1;
@@ -348,6 +383,13 @@ ssize_t proto_crypt_dec(uint8_t ibuf[PCRYPT_ESZ], uint8_t * obuf,
 void
 proto_crypt_free(struct proto_keys * k)
 {
+
+	/* Be compatible with free(NULL). */
+	if (k == NULL)
+		return;
+
+	/* Free the AES key. */
+	crypto_aes_key_free(k->k_aes);
 
 	/* Free the key structure. */
 	free(k);

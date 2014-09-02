@@ -5,30 +5,23 @@ BINDIR_DEFAULT=	/usr/local/bin
 CFLAGS_DEFAULT=	-O2
 
 all:
-	if [ -z "${CFLAGS}" ]; then			\
-		CFLAGS=${CFLAGS_DEFAULT};		\
-	else						\
-		CFLAGS="${CFLAGS}";			\
-	fi;						\
-	LDADD_POSIX=`export CC=${CC}; cd POSIX && command -p sh posix-l.sh`;	\
-	for D in ${PROGS}; do					\
-		( cd $${D} && 					\
-		    make CFLAGS="$${CFLAGS}"			\
-			LDADD_POSIX="$${LDADD_POSIX}" all ) ||	\
-		    exit 2;					\
+	export CFLAGS="$${CFLAGS:-${CFLAGS_DEFAULT}}";	\
+	export LDADD_POSIX=`export CC="${CC}"; cd POSIX && command -p sh posix-l.sh`;	\
+	export CFLAGS_POSIX=`export CC="${CC}"; cd POSIX && command -p sh posix-cflags.sh`;	\
+	( export CC="${CC}"; cd libcperciva/cpusupport/Build && command -p sh cpusupport.sh ) > cpusupport-config.h;	\
+	. ./cpusupport-config.h;			\
+	for D in ${PROGS}; do				\
+		( cd $${D} && make all ) || exit 2;	\
 	done
 
 install: all
-	if [ -z "${BINDIR}" ]; then			\
-		BINDIR=${BINDIR_DEFAULT};		\
-	else						\
-		BINDIR="${BINDIR}";			\
-	fi;						\
+	export BINDIR=$${BINDIR:-${BINDIR_DEFAULT}};	\
 	for D in ${PROGS}; do				\
-		( cd $${D} && make BINDIR="$${BINDIR}" install ) || exit 2;	\
+		( cd $${D} && make install ) || exit 2;	\
 	done
 
 clean:
+	rm -f cpusupport-config.h
 	for D in ${PROGS}; do				\
 		( cd $${D} && make clean ) || exit 2;	\
 	done
