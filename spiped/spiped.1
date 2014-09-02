@@ -30,11 +30,12 @@ spiped \- secure pipe daemon
 \-t <target socket>
 \-k <key file>
 .br
-[\-DfFj]
+[\-DFj]
+[\-f | \-g]
 [\-n <max # connections>]
 [\-o <connection timeout>]
 [\-p <pidfile>]
-[{\-r <rtime> | \-R}]
+[\-r <rtime> | \-R]
 .SH OPTIONS
 .TP
 .B \-e
@@ -75,6 +76,10 @@ Use fast/weak handshaking: This reduces the CPU time spent in the
 initial connection setup, at the expense of losing perfect forward
 secrecy.
 .TP
+.B \-g
+Require perfect forward secrecy by dropping connections if the other
+host is using the -f option.
+.TP
 .B \-F
 Run in foreground.  This can be useful with systems like daemontools.
 .TP
@@ -83,8 +88,9 @@ Disable transport layer keep-alives.
 (By default they are enabled.)
 .TP
 .B \-n <max # connections>
-Limit on the number of simultaneous connections allowed.  Defaults
-to 100 connections.
+Limit on the number of simultaneous connections allowed.
+This value must be between 1 and 500.
+Defaults to 100 connections.
 .TP
 .B \-o <connection timeout>
 Timeout, in seconds, after which an attempt to connect to the target
