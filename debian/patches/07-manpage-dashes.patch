@@ -1,0 +1,27 @@
+Description: Escape dashes in optional parameters.
+Forwarded: not-yet
+Author: Peter Pentchev <roam@ringlet.net>
+Last-Update: 2014-09-02
+
+--- a/spipe/spipe.1
++++ b/spipe/spipe.1
+@@ -46,7 +46,7 @@
+ .TP
+ .B \-g
+ Require perfect forward secrecy by dropping connections if the other
+-host is using the -f option.
++host is using the \-f option.
+ .TP
+ .B \-j
+ Disable transport layer keep-alives.
+--- a/spiped/spiped.1
++++ b/spiped/spiped.1
+@@ -78,7 +78,7 @@
+ .TP
+ .B \-g
+ Require perfect forward secrecy by dropping connections if the other
+-host is using the -f option.
++host is using the \-f option.
+ .TP
+ .B \-F
+ Run in foreground.  This can be useful with systems like daemontools.

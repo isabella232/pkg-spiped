@@ -1,12 +1,16 @@
-spiped (1.3.1-2) UNRELEASED; urgency=medium
+spiped (1.4.0-1) UNRELEASED; urgency=medium
 
   * Fix a minor debian/rules typo: actually add -Werror to the compiler
     flags if requested using "werror" in DEB_BUILD_OPTIONS.
   * Update the program version information in the manual pages.
     Closes: #744125
   * Bump the year of my copyright notice.
+  * New upstream version:
+    - update the 02-honor-compiler-flags and the 06-manpage-version patches
+    - add the 07-manpage-dashes patch to escape dashes in the description
+      of the newly-added -g command-line option
 
- -- Peter Pentchev <roam@ringlet.net>  Mon, 24 Feb 2014 11:40:11 +0200
+ -- Peter Pentchev <roam@ringlet.net>  Tue, 02 Sep 2014 15:43:58 +0300
 
 spiped (1.3.1-1) unstable; urgency=low
 
