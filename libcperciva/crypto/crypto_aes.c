@@ -7,6 +7,7 @@
 
 #include "cpusupport.h"
 #include "crypto_aes_aesni.h"
+#include "insecure_memzero.h"
 #include "warnp.h"
 
 #include "crypto_aes.h"
@@ -156,6 +157,9 @@ crypto_aes_key_free(struct crypto_aes_key * key)
 		return;
 	}
 #endif
+
+	/* Attempt to zero the expanded key. */
+	insecure_memzero(key, sizeof(AES_KEY));
 
 	/* Free the key. */
 	free(key);
