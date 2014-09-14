@@ -1,7 +1,7 @@
 .POSIX:
 PROG=spipe
 MAN1=spipe.1
-SRCS=main.c pushbits.c proto_conn.c proto_crypt.c proto_handshake.c proto_pipe.c sha256.c elasticarray.c ptrheap.c timerqueue.c asprintf.c entropy.c monoclock.c noeintr.c sock.c warnp.c cpusupport_x86_aesni.c events_immediate.c events_network.c events_network_selectstats.c events_timer.c events.c network_connect.c network_read.c network_write.c crypto_aes.c crypto_aes_aesni.c crypto_aesctr.c crypto_dh.c crypto_dh_group14.c crypto_entropy.c crypto_verify_bytes.c 
+SRCS=main.c pushbits.c proto_conn.c proto_crypt.c proto_handshake.c proto_pipe.c sha256.c elasticarray.c ptrheap.c timerqueue.c asprintf.c entropy.c insecure_memzero.c monoclock.c noeintr.c sock.c warnp.c cpusupport_x86_aesni.c events_immediate.c events_network.c events_network_selectstats.c events_timer.c events.c network_connect.c network_read.c network_write.c crypto_aes.c crypto_aes_aesni.c crypto_aesctr.c crypto_dh.c crypto_dh_group14.c crypto_entropy.c crypto_verify_bytes.c 
 IDIRS=-I ../proto -I ../libcperciva/alg -I ../libcperciva/datastruct -I ../libcperciva/util -I ../libcperciva/cpusupport -I ../libcperciva/events -I ../libcperciva/network -I ../libcperciva/crypto
 LDADD_REQ=-lcrypto -lpthread
 
@@ -51,6 +51,8 @@ asprintf.o: ../libcperciva/util/asprintf.c
 	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/asprintf.c -o asprintf.o
 entropy.o: ../libcperciva/util/entropy.c
 	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/entropy.c -o entropy.o
+insecure_memzero.o: ../libcperciva/util/insecure_memzero.c
+	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/insecure_memzero.c -o insecure_memzero.o
 monoclock.o: ../libcperciva/util/monoclock.c
 	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/monoclock.c -o monoclock.o
 noeintr.o: ../libcperciva/util/noeintr.c
