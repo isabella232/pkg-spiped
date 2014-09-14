@@ -1,3 +1,10 @@
+spiped (1.4.1-1) UNRELEASED; urgency=medium
+
+  * New upstream version:
+    - update the 02-honor compiler-flags and 06-manpage-version patches
+
+ -- Peter Pentchev <roam@ringlet.net>  Sun, 14 Sep 2014 05:46:27 +0300
+
 spiped (1.4.0-1) unstable; urgency=medium
 
   * Fix a minor debian/rules typo: actually add -Werror to the compiler

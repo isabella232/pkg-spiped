@@ -1,11 +1,11 @@
 Description: Honor the compiler and linker flags in the environment.
 Author: Peter Pentchev <roam@ringlet.net>
 Forwarded: http://mail.tarsnap.com/spiped/msg00044.html
-Last-Update: 2014-09-02
+Last-Update: 2014-09-14
 
 --- a/spipe/Makefile
 +++ b/spipe/Makefile
-@@ -25,69 +25,69 @@
+@@ -25,71 +25,71 @@
  	rm -f ${PROG} ${SRCS:.c=.o}
  
  ${PROG}:${SRCS:.c=.o}
@@ -48,6 +48,9 @@ Last-Update: 2014-09-02
  entropy.o: ../libcperciva/util/entropy.c
 -	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/entropy.c -o entropy.o
 +	${CC} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} ${CFLAGS_POSIX} ${CPPFLAGS} ${CFLAGS} -c ../libcperciva/util/entropy.c -o entropy.o
+ insecure_memzero.o: ../libcperciva/util/insecure_memzero.c
+-	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/insecure_memzero.c -o insecure_memzero.o
++	${CC} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} ${CFLAGS_POSIX} ${CPPFLAGS} ${CFLAGS} -c ../libcperciva/util/insecure_memzero.c -o insecure_memzero.o
  monoclock.o: ../libcperciva/util/monoclock.c
 -	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/monoclock.c -o monoclock.o
 +	${CC} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} ${CFLAGS_POSIX} ${CPPFLAGS} ${CFLAGS} -c ../libcperciva/util/monoclock.c -o monoclock.o
@@ -110,7 +113,7 @@ Last-Update: 2014-09-02
 +	${CC} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} ${CFLAGS_POSIX} ${CPPFLAGS} ${CFLAGS} -c ../libcperciva/crypto/crypto_verify_bytes.c -o crypto_verify_bytes.o
 --- a/spiped/Makefile
 +++ b/spiped/Makefile
-@@ -25,77 +25,77 @@
+@@ -25,79 +25,79 @@
  	rm -f ${PROG} ${SRCS:.c=.o}
  
  ${PROG}:${SRCS:.c=.o}
@@ -159,6 +162,9 @@ Last-Update: 2014-09-02
  entropy.o: ../libcperciva/util/entropy.c
 -	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/entropy.c -o entropy.o
 +	${CC} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} ${CFLAGS_POSIX} ${CPPFLAGS} ${CFLAGS} -c ../libcperciva/util/entropy.c -o entropy.o
+ insecure_memzero.o: ../libcperciva/util/insecure_memzero.c
+-	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/insecure_memzero.c -o insecure_memzero.o
++	${CC} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} ${CFLAGS_POSIX} ${CPPFLAGS} ${CFLAGS} -c ../libcperciva/util/insecure_memzero.c -o insecure_memzero.o
  monoclock.o: ../libcperciva/util/monoclock.c
 -	${CC} ${CFLAGS} ${CFLAGS_POSIX} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} -c ../libcperciva/util/monoclock.c -o monoclock.o
 +	${CC} -D_POSIX_C_SOURCE=200809L -DCPUSUPPORT_CONFIG_FILE=\"cpusupport-config.h\"  -I .. ${IDIRS} ${CFLAGS_POSIX} ${CPPFLAGS} ${CFLAGS} -c ../libcperciva/util/monoclock.c -o monoclock.o
