@@ -1,9 +1,9 @@
-spiped (1.4.1-1) UNRELEASED; urgency=medium
+spiped (1.5.0-1) UNRELEASED; urgency=medium
 
   * New upstream version:
-    - update the 02-honor compiler-flags and 06-manpage-version patches
+    - update 06-manpage-version patch and remove 07-manpage-dashes
 
- -- Peter Pentchev <roam@ringlet.net>  Sun, 14 Sep 2014 05:46:27 +0300
+ -- Dhananjay Balan <dj@inflo.ws>  Tue, 17 Mar 2015 17:27:33 +0000
 
 spiped (1.4.0-1) unstable; urgency=medium
 
